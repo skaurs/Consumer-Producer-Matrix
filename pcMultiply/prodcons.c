@@ -20,8 +20,15 @@
 
 
 // Define Locks and Condition variables here
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_cond_t cond = PTHREAD_MUTX_INITIALIZER;
+pthread_cond_t empty, full;
 
 // Producer consumer data structures
+Matrix * bigmatrix[MAX]
+int count = 0;
+int fill_ptr = 0;
+int use_ptr = 0;
 
 // Bounded buffer bigmatrix defined in prodcons.h
 //Matrix ** bigmatrix;
@@ -29,7 +36,7 @@
 // Bounded buffer put() get()
 int put(Matrix * value)
 {
-
+	
 }
 
 Matrix * get()
