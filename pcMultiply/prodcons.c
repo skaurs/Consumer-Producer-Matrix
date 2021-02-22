@@ -36,7 +36,13 @@ int use_ptr = 0;
 // Bounded buffer put() get()
 int put(Matrix * value)
 {
-	
+ int matrixTot = 0;
+ int matrixProd = 0;
+ bigmatrix[fill_ptr] = value;
+ fill_ptr = (fill_ptr)%MAX;
+ counter++;
+ matrixTot++;
+ matrixProd++;
 }
 
 Matrix * get()
