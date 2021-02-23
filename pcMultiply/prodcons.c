@@ -35,12 +35,14 @@ int use_ptr = 0;
 
 int matrixTot = 0;
 int matrixProd = 0;
+int matrixCons = 0;
+
 
 // Bounded buffer put() get()
 int put(Matrix * value)
 {
  bigmatrix[fill_ptr] = value;
- fill_ptr = (fill_ptr)%MAX;
+ fill_ptr = (fill_ptr + 1)%MAX;
  counter++;
  matrixTot++;
  matrixProd++; // metrix being made
@@ -48,7 +50,12 @@ int put(Matrix * value)
 
 Matrix * get()
 {
-  return NULL;
+  Matrix *temp = bigmatrix[use_ptr];
+  use_ptr = (use_ptr +1)%MAX;
+  counter--;
+  matrixCons++;
+  matrixTot++;
+  return temp;
 }
 
 // Matrix PRODUCER worker thread
