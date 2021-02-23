@@ -33,7 +33,7 @@ int use_ptr = 0;
 // Bounded buffer bigmatrix defined in prodcons.h
 //Matrix ** bigmatrix;
 
-int matrixTot = 0;
+int matrixtotal = 0;
 int matrixProd = 0;
 int matrixCons = 0;
 
@@ -44,7 +44,7 @@ int put(Matrix * value)
  bigmatrix[fill_ptr] = value;
  fill_ptr = (fill_ptr + 1)%MAX;
  counter++;
- matrixTot++;
+ matrixtotal++;
  matrixProd++; // metrix being made
 }
 
@@ -64,12 +64,16 @@ void *prod_worker(void *arg)
   int i;
   for(i = 0; i < loops; i++) {
      Pthread_mutex_lock(&mutex);
-     while (count == MAX) 
+     while (count == MAX) {
 	Pthread_cond_wait(&empty, &mutex);
-     put(i);
+     }
+     Matrix *n = GenMatrixRandom();
+     put(n);
+		
      Pthread_cond_signal(&fill);
      Pthread_mutex_unlock(&mutex);
    }
+   return NULL
 }
 
 // Matrix CONSUMER worker thread
