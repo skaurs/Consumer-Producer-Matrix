@@ -26,13 +26,9 @@ pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER;
 pthread_cond_t empty = PTHREAD_COND_INITIALIZER, full = PTHREAD_COND_INITIALIZER;
 
 // Producer consumer data structures
-//Matrix * bigmatrix[MAX];
 int count = 0;
 int fill_ptr = 0;
 int use_ptr = 0;
-
-// Bounded buffer bigmatrix defined in prodcons.h
-//Matrix ** bigmatrix;
 
 volatile int pcount = 0;
 volatile int ccount = 0;
@@ -43,16 +39,12 @@ Matrix * M1 = NULL;
 Matrix * M2 = NULL;
 Matrix * M3 = NULL;
 
-
 // Bounded buffer put() get()
 int put(Matrix * value)
 {
- //bigmatrix[fill_ptr] = value;
  *(bigmatrix + fill_ptr) = value;
  fill_ptr = (fill_ptr + 1)%MAX;
  count++;
- //matrixtotal++;
- //matrixProd++; // metrix being made
  return 0;
 }
 
@@ -61,8 +53,6 @@ Matrix * get()
   Matrix *temp = *(bigmatrix + use_ptr);
   use_ptr = (use_ptr +1)%MAX;
   count--;
-  //matrixCons++;
-  //matrixTotal++;
   return temp;
 }
 
@@ -73,20 +63,21 @@ void *prod_worker(void *arg)
   for(; pcount < LOOPS; pcount++) {
      pthread_mutex_lock(&mutex);
      while (count == MAX && prgcount == 0) {
-	pthread_cond_wait(&empty, &mutex);
+       pthread_cond_wait(&empty, &mutex);
      }
      if(prod_count->matrixtotal == LOOPS){
-     	pthread_cond_broadcast(&full);
+       pthread_cond_broadcast(&full);
      } else {
-     	Matrix * M1 = GenMatrixRandom();
-     	put(M1);
-     	prod_count->matrixtotal++;
-	prod_count->sumtotal += SumMatrix(M1);	
-     	pthread_cond_signal(&full);
+       Matrix * M1 = GenMatrixRandom();
+       put(M1);
+       prod_count->matrixtotal++;
+       prod_count->sumtotal += SumMatrix(M1);	
+       pthread_cond_signal(&full);
      }
      pthread_mutex_unlock(&mutex);
    }
    return prod_count;
+
 }
 
 // Matrix CONSUMER worker thread
